@@ -47,17 +47,20 @@
         <!-- Hero Section -->
         <section class="hero section">
             <div class="container hero-container">
-                <div class="hero-content reveal">
-                    <div class="badge">Open to new opportunities</div>
-                    <h1 class="hero-title">Senior DevOps <span class="gradient-text">Engineer</span></h1>
-                    <p class="hero-subtitle">
-                        I am a <strong>Senior DevOps Engineer</strong> with over 6 years of experience. I specialize in AWS, Azure, Terraform, and Kubernetes. I build, secure, and manage scalable cloud infrastructure, automate CI/CD deployments, and handle complex database migrations.
+                <div class="hero-content">
+                    <div class="badge"><i class="fas fa-terminal"></i> root@lingaraj:~#</div>
+                    <h1 class="hero-title"><span class="terminal-prompt">$ sudo su</span> <br> Lingaraj</h1>
+                    <h2 class="hero-subtitle"><span class="gradient-text">Senior DevOps Engineer</span></h2>
+                    <p class="hero-subtitle" style="font-size: 1.1rem; line-height: 1.6;">
+                        I am a Senior DevOps Engineer with over 6 years of experience. I specialize in AWS, Azure, Terraform, and Kubernetes. I build, secure, and manage scalable cloud infrastructure, automate CI/CD deployments, and handle complex database migrations.
                     </p>
-                    <div class="hero-buttons">
+                    <div class="hero-actions">
                         <a href="resume.pdf" download="Lingaraj-DevOps-Resume.pdf" class="btn-primary">
                             <i class="fas fa-file-pdf"></i> Download Resume
                         </a>
-                        <a href="projects.html" class="btn-secondary">View Projects</a>
+                        <a href="projects.html" class="btn-secondary">
+                            View Projects
+                        </a>
                     </div>
                 </div>
                 
@@ -67,7 +70,6 @@
                         <div class="window-header">
                             <div class="dots"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
                             <div class="filename">main.tf</div>
-                        </div>
                         <div class="window-body">
 <pre><code><span class="keyword">module</span> <span class="string">"enterprise_infrastructure"</span> {
   <span class="keyword">source</span>  = <span class="string">"lingaraj/multi-cloud/aws"</span>

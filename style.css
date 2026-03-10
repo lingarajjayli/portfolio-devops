@@ -257,37 +257,14 @@ code .comment { color: #64748B; font-style: italic; }
 .skill-card strong { color: var(--text-main); font-weight: 600; }
 
 .skill-header {
-    position: relative; padding-right: 40px; display: flex; align-items: center; min-height: 30px;
+    position: relative; padding-right: 40px; display: flex; align-items: center; margin-bottom: 12px;
 }
 
 .skill-details {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.4s ease, margin-top 0.4s ease, opacity 0.4s ease;
-}
-
-.skill-card.expanded .skill-details {
-    max-height: 300px;
-    margin-top: 16px;
     opacity: 1;
 }
 
-.skill-card .expand-btn {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-    pointer-events: none;
-}
-.skill-card.expanded .expand-btn {
-    transform: translateY(-50%) rotate(180deg);
-}
+
 
 /* CTA Box */
 .cta-box { background: linear-gradient(180deg, var(--bg-surface) 0%, rgba(19, 27, 44, 0.5) 100%); border: 1px solid var(--border-highlight); border-radius: var(--radius-lg); padding: 80px 40px; text-align: center; }
