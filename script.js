@@ -64,4 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Expandable Project Cards
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const isExpanded = card.classList.contains('expanded');
+            
+            // Optional: Close all other cards when one is opened
+            document.querySelectorAll('.project-card').forEach(c => c.classList.remove('expanded'));
+            
+            if (!isExpanded) {
+                card.classList.add('expanded');
+            }
+        });
+    });
 });
