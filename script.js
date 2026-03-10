@@ -1,44 +1,33 @@
-// Navbar Scroll Effect
-const navbar = document.querySelector('.navbar');
+// Apple-style extremely smooth, subtle scroll animations
 
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+document.addEventListener('DOMContentLoaded', () => {
+    // Reveal Observer for smooth sliding up of elements
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 
+    };
 
-// Scroll Reveal Animations
-function reveal() {
-    var reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                // Optional: Unobserve after revealing to keep the state
+                // observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
 
-    for (var i = 0; i < reveals.length; i++) {
-        var windowHeight = window.innerHeight;
-        var elementTop = reveals[i].getBoundingClientRect().top;
-        var elementVisible = 100;
+    const revealElements = document.querySelectorAll('.reveal-up');
+    revealElements.forEach(el => {
+        observer.observe(el);
+    });
 
-        if (elementTop < windowHeight - elementVisible) {
-            reveals[i].classList.add("active");
-        }
-    }
-}
-
-window.addEventListener("scroll", reveal);
-
-// Trigger reveal on load
-reveal();
-
-// Glitch effect on hover for the main title
-const glitchText = document.querySelector('.glitch');
-
-glitchText.addEventListener('mouseover', () => {
-    glitchText.style.animation = 'none';
+    // Make the initial hero reveal automatically instead of waiting for scroll
     setTimeout(() => {
-        glitchText.style.animation = 'glitch 1s linear infinite';
-    }, 10);
-});
-
-glitchText.addEventListener('mouseout', () => {
-    glitchText.style.animation = 'none';
+        const heroElements = document.querySelectorAll('.hero-section .reveal-up');
+        heroElements.forEach(el => {
+            el.classList.add('active');
+        });
+    }, 100);
 });
