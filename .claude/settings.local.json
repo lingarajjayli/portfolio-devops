@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit -m \"feat: complete devops portfolio with terraform, k8s, docker, and CI/CD:*)"
+      "Bash(git commit -m \"feat: complete devops portfolio with terraform, k8s, docker, and CI/CD:*)",
+      "Bash(gh repo:*)"
     ]
   }
 }
