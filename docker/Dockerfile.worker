@@ -1,0 +1,88 @@
+#
+# Worker Dockerfile
+# Multi-stage build for a production-ready worker job processor
+#
+
+# Stage 1: Build stage (Python)
+FROM python:3.11-slim AS builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    python3-dev \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy requirements first (better layer caching)
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+
+# Copy source code
+COPY . .
+
+# Install application
+RUN pip install --no-cache-dir --no-deps --prefix="/app" /app/wheels/*.whl
+
+# Clean up
+RUN rm -r /app/wheels
+
+# Stage 2: Production stage
+FROM python:3.11-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libpq5 \
+    curl \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create non-root user
+RUN addgroup --system --gid 1000 appgroup && \
+    adduser --system --ingroup appgroup appuser
+
+WORKDIR /app
+
+# Copy wheels from builder
+COPY --from=builder /app/wheels /app/wheels
+COPY --from=builder --chown=appuser:appgroup /app/dist /app/dist
+COPY --from=builder --chown=appuser:appgroup /app.egg-info /app.egg-info
+
+# Copy installed application
+COPY --from=builder --chown=appuser:appgroup /usr/local/lib/python3.11/dist-packages /usr/local/lib/python3.11/dist-packages
+COPY --from=builder --chown=appuser:appgroup /usr/local/bin /usr/local/bin
+
+# Copy application
+COPY --chown=appuser:appgroup . .
+
+# Install local dependencies
+RUN pip install --no-cache-dir --prefix="/app" /app/dist/*.whl
+
+# Clean up
+RUN rm -r /app/dist /app/wheels /app/*.egg-info
+
+# Copy supervisor configuration
+COPY --chown=appuser:appgroup supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Switch to non-root user
+USER appuser
+
+# Expose metrics port
+EXPOSE 8080 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl --fail http://localhost:8080/health || exit 1
+
+# Environment variables (optional)
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Start supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

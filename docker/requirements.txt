@@ -1,0 +1,51 @@
+#
+# Backend Requirements
+# Python packages for backend API
+#
+
+# Web framework
+Flask==3.0.0
+Flask-CORS==4.0.0
+Flask-Caching==2.0.2
+
+# Database
+SQLAlchemy==2.0.23
+psycopg2-binary==2.9.9
+mysql-connector-python==8.3.0
+
+# Caching
+redis==5.0.1
+Flask-Redis==0.4.0
+
+# Authentication
+PyJWT==2.8.0
+python-jose==3.3.0
+
+# Validation
+python-multipart==0.0.6
+marshmallow==3.20.1
+email-validator==2.1.0
+
+# Security
+werkzeug==3.0.1
+
+# Monitoring
+prometheus-flask-exporter==0.23.0
+sentry-sdk==1.35.0
+
+# Utilities
+python-dotenv==1.0.0
+pydantic==2.5.3
+requests==2.31.0
+
+# Production server
+gunicorn==21.2.0
+waitress==3.0.0
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Documentation
+mkdocs==1.5.2
+mkdocs-material==9.5.14

@@ -1,0 +1,192 @@
+#
+# Worker Deployment
+# A realistic Kubernetes deployment for background job processing
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  namespace: devops-portfolio
+  labels:
+    app: worker
+    app.kubernetes.io/name: worker
+    app.kubernetes.io/instance: worker-processor
+    version: v1.0.0
+  annotations:
+    description: "Background job processor for asynchronous tasks"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+        app.kubernetes.io/name: worker
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      serviceAccountName: worker-sa
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: worker
+          image: python:3.11-slim
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-u"]
+          args: ["-m", "waitress", "--port=8080", "-m", "app"]
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 1Gi
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: LOG_LEVEL
+              value: INFO
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: worker-secrets
+                  key: queue_url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: worker-secrets
+                  key: redis_url
+            - name: CELERY_BROKER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: worker-secrets
+                  key: celery_broker_url
+          envFrom:
+            - configMapRef:
+                name: worker-env
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+              readOnly: false
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+          workingDir: /app
+          startupProbe:
+            httpGet:
+              path: /startup
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sh", "-c", "chown -R 1000:1000 /app /tmp"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 1Gi
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: worker-config
+      securityContext:
+        fsGroup: 1000
+
+---
+# Worker Service (internal only)
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-service
+  namespace: devops-portfolio
+  labels:
+    app: worker
+    app.kubernetes.io/name: worker-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: worker
+
+---
+# Worker Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: worker-hpa
+  namespace: devops-portfolio
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: worker
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+---
+# Worker Pod Disruption Budget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: worker-pdb
+  namespace: devops-portfolio
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: worker

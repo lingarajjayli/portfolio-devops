@@ -1,0 +1,157 @@
+#
+# Kubernetes Services
+# Service definitions for all applications
+#
+
+---
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: devops-portfolio
+  labels:
+    app: frontend
+    app.kubernetes.io/name: frontend-service
+    app.kubernetes.io/instance: frontend-web
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    app: frontend
+---
+# Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: devops-portfolio
+  labels:
+    app: backend
+    app.kubernetes.io/name: backend-service
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: backend
+---
+# Worker Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-service
+  namespace: devops-portfolio
+  labels:
+    app: worker
+    app.kubernetes.io/name: worker-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: worker
+---
+# Metrics Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: metrics-service
+  namespace: devops-portfolio
+  labels:
+    app: metrics
+    app.kubernetes.io/name: metrics-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9090
+      targetPort: http
+      protocol: TCP
+      name: metrics
+  selector:
+    app: frontend
+    app: backend
+    app: worker
+---
+# Database Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+  namespace: devops-portfolio
+  labels:
+    app: database
+    app.kubernetes.io/name: database-service
+spec:
+  type: ClusterIP
+  clusterIP: None  # Headless service for stateful sets
+  publishNotReadyAddresses: true
+  ports:
+    - port: 3306
+      targetPort: mysql
+      protocol: TCP
+      name: mysql
+  selector:
+    app: database
+---
+# Redis Cache Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: devops-portfolio
+  labels:
+    app: redis
+    app.kubernetes.io/name: redis-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: redis
+      protocol: TCP
+      name: redis
+  selector:
+    app: redis
+---
+# Message Queue Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-queue-service
+  namespace: devops-portfolio
+  labels:
+    app: message-queue
+    app.kubernetes.io/name: message-queue-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5672
+      targetPort: amqp
+      protocol: TCP
+      name: amqp
+    - port: 15672
+      targetPort: management
+      protocol: TCP
+      name: management
+  selector:
+    app: message-queue

@@ -1,0 +1,77 @@
+#
+# Kubernetes Namespaces
+# Define namespaces for organizing resources by environment
+#
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-portfolio
+  labels:
+    name: devops-portfolio
+    env: development
+  annotations:
+    description: "Development namespace for DevOps portfolio"
+    owner: "DevOps Team"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-portfolio-staging
+  labels:
+    name: devops-portfolio-staging
+    env: staging
+  annotations:
+    description: "Staging namespace for DevOps portfolio"
+    owner: "DevOps Team"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-portfolio-prod
+  labels:
+    name: devops-portfolio-prod
+    env: production
+    managed-by: "automated"
+  annotations:
+    description: "Production namespace for DevOps portfolio"
+    owner: "DevOps Team"
+    # Ensure compliance
+    compliance: "SOC2"
+
+---
+# Resource Quota for namespaces
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: devops-quota
+  namespace: devops-portfolio
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    pods: "50"
+    services: "10"
+    secrets: "20"
+
+---
+# Limit Range for namespaces
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: devops-limits
+  namespace: devops-portfolio
+spec:
+  limits:
+    - default:
+        cpu: "500m"
+        memory: 512Mi
+      defaultRequest:
+        cpu: "100m"
+        memory: 128Mi
+      type: Container

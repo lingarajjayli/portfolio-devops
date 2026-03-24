@@ -1,0 +1,43 @@
+#
+# Database Dockerfile (MySQL)
+# Multi-stage build for a production-ready MySQL database
+#
+
+# Stage 1: Build stage (install dependencies)
+FROM mysql:8.0
+
+# Install monitoring tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create monitoring directory
+RUN mkdir -p /var/log/app-database && \
+    chown -R 999:999 /var/log/app-database
+
+# Copy monitoring scripts
+COPY --chown=999:999 healthcheck.sh /usr/local/bin/
+COPY --chown=999:999 db-healthcheck.sh /usr/local/bin/
+
+# Make scripts executable
+RUN chmod +x /usr/local/bin/healthcheck.sh \
+    /usr/local/bin/db-healthcheck.sh
+
+# Cleanup
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
+    /root/.gnupg \
+    /var/cache/dnf/* \
+    /var/log/dnf.log
+
+# Expose MySQL port
+EXPOSE 3306
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD healthcheck.sh || exit 1
+
+# Start MySQL
+CMD ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]

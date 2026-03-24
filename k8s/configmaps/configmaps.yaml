@@ -1,0 +1,254 @@
+#
+# ConfigMaps
+# Configuration data for applications (non-sensitive)
+#
+
+---
+# Frontend ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: devops-portfolio
+  labels:
+    app: frontend
+data:
+  # Nginx configuration
+  nginx.conf: |
+    user www-data;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log;
+    pid /var/run/nginx.pid;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log /var/log/nginx/access.log main;
+
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max 2048;
+
+        gzip on;
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 6;
+        gzip_buffers 16 8k;
+        gzip_http_version 1.1;
+        gzip_min_length 1000;
+        gzip_types text/plain text/css text/xml application/json application/javascript application/xml application/xml+rss text/javascript;
+
+        server {
+            listen 80 default_server;
+            listen [::]:80 default_server;
+            server_name localhost;
+            root /var/www/html;
+
+            location / {
+                try_files $uri $uri/ =404;
+            }
+
+            location /health {
+                access_log off;
+                return 200 'healthy\n';
+                add_header Content-Type text/plain;
+            }
+
+            location /metrics {
+                stub_status on;
+                access_log off;
+                allow 127.0.0.0/16;
+                allow 10.0.0.0/8;
+                deny all;
+            }
+        }
+  config.yaml: |
+    app:
+      name: frontend
+      version: "1.0.0"
+      environment: development
+
+    logging:
+      level: info
+      format: json
+      output: stdout
+
+    cache:
+      enabled: true
+      ttl: 300
+      backend: redis
+
+    features:
+      - analytics
+      - caching
+      - cdn
+
+---
+# Backend ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: devops-portfolio
+  labels:
+    app: backend
+data:
+  config.yaml: |
+    app:
+      name: backend-api
+      version: "1.0.0"
+      environment: development
+
+    server:
+      host: 0.0.0.0
+      port: 8080
+      max_connections: 1000
+      worker_processes: 4
+
+    logging:
+      level: INFO
+      format: json
+      output: stdout
+      include_time: true
+
+    database:
+      pool_size: 10
+      max_overflow: 20
+      timeout: 30
+      pool_recycle: 1800
+      echo: false
+
+    cache:
+      redis:
+        host: redis-service
+        port: 6379
+        db: 0
+        max_retries: 3
+        timeout: 5
+
+    features:
+      - authentication
+      - rate-limiting
+      - request-validation
+      - response-caching
+
+    api:
+      rate_limiting:
+        enabled: true
+        requests_per_minute: 60
+      cors:
+        enabled: true
+        allow_origin: "*"
+        allow_methods: "GET,POST,PUT,DELETE"
+
+---
+# Worker ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-config
+  namespace: devops-portfolio
+  labels:
+    app: worker
+data:
+  config.yaml: |
+    worker:
+      name: job-processor
+      version: "1.0.0"
+
+    queue:
+      type: redis
+      retry_policy:
+        max_retries: 3
+        interval: 5s
+        exponential_backoff: true
+
+    job_processing:
+      concurrency: 4
+      max_retries: 3
+      timeout: 300
+      parallel_jobs: true
+
+    health_checks:
+      enabled: true
+      interval: 30
+      endpoints:
+        - /health
+        - /ready
+
+    metrics:
+      enabled: true
+      port: 9090
+      path: /metrics
+
+    logging:
+      level: INFO
+      format: json
+
+    cleanup:
+      max_age: 86400
+      enabled: true
+
+---
+# Nginx ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: devops-portfolio
+  labels:
+    app: nginx
+data:
+  nginx.conf: |
+    user www-data;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log warn;
+    pid /var/run/nginx.pid;
+
+    events {
+        worker_connections 1024;
+        use epoll;
+        multi_accept on;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        log_format main '$remote_addr - $remote_user [$time_local] '
+                        '"$request" $status $body_bytes_sent '
+                        '"$http_referer" "$http_user_agent"';
+
+        access_log /var/log/nginx/access.log main;
+
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max 2048;
+
+        gzip on;
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 6;
+        gzip_buffers 16 8k;
+        gzip_http_version 1.1;
+        gzip_min_length 256;
+        gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/xml application/xml-external-parsed-entity application/xml-dtd application/xml-watchseed application/x-javascript text/x-component;
+
+        limit_conn_zone $binary_remote_addr zone=addr:10m;
+        limit_conn 10;
+
+        include /etc/nginx/conf.d/*.conf;
+    }
