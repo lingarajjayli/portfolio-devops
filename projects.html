@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lingaraj - Senior DevOps Engineer Projects.">
+    <title>Projects | Lingaraj DevOps</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient Glowing Background -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="brand">
+                <span class="icon"><i class="fas fa-terminal"></i></span>
+                <span class="name">Lingaraj</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Intro</a>
+                <a href="projects.html" class="active">Projects</a>
+                <a href="about.html">Experience & Skills</a>
+            </nav>
+            <div class="nav-cta hide-mobile">
+                <a href="https://linkedin.com/in/lingarajjayli" target="_blank" aria-label="LinkedIn" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/lingarajjayli" target="_blank" aria-label="GitHub" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="mailto:lingarajjayli@gmail.com" aria-label="Email" class="social-icon"><i class="fas fa-envelope"></i></a>
+                <a href="resume.pdf" download="Lingaraj-DevOps-Resume.pdf" class="btn-primary btn-small">
+                    <i class="fas fa-file-pdf"></i> Resume
+                </a>
+            </div>
+            <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Featured Projects Section -->
+        <section class="projects section">
+            <div class="container">
+                <div class="section-header reveal page-header">
+                    <h2><span class="gradient-text">Projects</span></h2>
+                    <p>A selection of projects I have worked on, focusing on infrastructure creation, database migration, and security compliance.</p>
+                </div>
+
+                <div class="projects-grid">
+                    
+                    <!-- Project 1: Infra Creation -->
+                    <article class="project-card reveal">
+                        <div class="project-visual glyph-bg">
+                            <div class="grid-pattern"></div>
+                            <i class="fas fa-network-wired display-icon"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-header-collapsed">
+                                <div class="tags">
+                                    <span>AWS</span><span>Azure</span><span>Terraform</span><span>Networking</span>
+                                </div>
+                                <h3>Infrastructure Creation</h3>
+                            </div>
+                            <div class="project-details">
+                                <p style="margin-bottom: 12px;">Provisioned scalable, highly available multi-cloud infrastructure on AWS and Azure for Saviynt. My focus was on establishing secure, interconnected environments that adhered to strict compliance standards.</p>
+                                <ul style="color: var(--text-muted); padding-left: 20px; font-size: 0.95rem; line-height: 1.6;">
+                                    <li>Automated the deployment of VPC peering and Transit Gateways.</li>
+                                    <li>Provisioned EKS clusters and complex RDS architectures using Terraform.</li>
+                                    <li>Designed networking layers for secure connectivity and traffic management.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 2: DMS Migration -->
+                    <article class="project-card reveal delay-1">
+                        <div class="project-visual glyph-bg">
+                            <div class="data-pattern"></div>
+                            <i class="fas fa-database display-icon"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-header-collapsed">
+                                <div class="tags">
+                                    <span>AWS DMS</span><span>Azure DMS</span><span>MySQL</span><span>CDC</span>
+                                </div>
+                                <h3>Enterprise Database Migration</h3>
+                            </div>
+                            <div class="project-details">
+                                <p style="margin-bottom: 12px;">Architected and managed the seamless migration of over 80 enterprise client databases across environments utilizing AWS DMS and Azure DMS.</p>
+                                <ul style="color: var(--text-muted); padding-left: 20px; font-size: 0.95rem; line-height: 1.6;">
+                                    <li>Configured Change Data Capture (CDC) to ensure minimal downtime and zero data loss.</li>
+                                    <li>Established specialized endpoints, including S3 Parquet, for data lake integration.</li>
+                                    <li>Automated the migration workflow, reducing overall execution time by 70%.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 3: Laceworks & SOC2 -->
+                    <article class="project-card reveal">
+                        <div class="project-visual glyph-bg">
+                            <div class="shield-pattern"></div>
+                            <i class="fas fa-shield-halved display-icon"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-header-collapsed">
+                                <div class="tags">
+                                    <span>Lacework</span><span>SOC 1/2</span><span>IRAP</span><span>CloudTrail</span>
+                                </div>
+                                <h3>Security & Compliance Setup</h3>
+                            </div>
+                            <div class="project-details">
+                                <p style="margin-bottom: 12px;">Led the security and compliance preparation efforts for over 50 isolated cloud accounts, ensuring continuous readiness for SOC 1/2, IRAP, and NIST audits.</p>
+                                <ul style="color: var(--text-muted); padding-left: 20px; font-size: 0.95rem; line-height: 1.6;">
+                                    <li>Integrated Laceworks for continuous security posture management and vulnerability scanning.</li>
+                                    <li>Enforced strict IAM Least-Privilege policies, MFA, and EBS encryption.</li>
+                                    <li>Remediated over 100 high-priority security findings across the infrastructure.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 4: ISPM -->
+                    <article class="project-card reveal delay-1">
+                        <div class="project-visual glyph-bg">
+                            <div class="code-pattern"></div>
+                            <i class="fas fa-code-branch display-icon"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-header-collapsed">
+                                <div class="tags">
+                                    <span>CI/CD</span><span>ISPM</span><span>GitLab</span><span>Microservices</span>
+                                </div>
+                                <h3>ISPM CI/CD Automation</h3>
+                            </div>
+                            <div class="project-details">
+                                <p style="margin-bottom: 12px;">Built robust, fully automated continuous integration and deployment (CI/CD) pipelines for Information Security & Privacy Management (ISPM) applications.</p>
+                                <ul style="color: var(--text-muted); padding-left: 20px; font-size: 0.95rem; line-height: 1.6;">
+                                    <li>Migrated legacy build systems to modern GitLab CI/CD pipelines.</li>
+                                    <li>Standardized Docker container builds and artifact management for microservices.</li>
+                                    <li>Automated unit testing and quality gates for reliable production releases.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 5: Troubleshooting -->
+                    <article class="project-card reveal full-width">
+                        <div class="project-visual glyph-bg">
+                            <div class="pulse-pattern"></div>
+                            <i class="fas fa-wave-square display-icon"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-header-collapsed">
+                                <div class="tags">
+                                    <span>Cloud Networking</span><span>VPC</span><span>Routing</span><span>Troubleshooting</span>
+                                </div>
+                                <h3>Cloud Troubleshooting</h3>
+                            </div>
+                            <div class="project-details">
+                                <p style="margin-bottom: 12px;">Acted as the primary escalation point for resolving complex cloud networking and infrastructure anomalies across multiple enterprise environments.</p>
+                                <ul style="color: var(--text-muted); padding-left: 20px; font-size: 0.95rem; line-height: 1.6;">
+                                    <li>Diagnosed and resolved inter-VPC connectivity issues between QA and production.</li>
+                                    <li>Optimized routing tables and implemented secure, robust VPN connections.</li>
+                                    <li>Utilized centralized logging (ELK stack) to reduce issue resolution time by 38%.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Floating Actions -->
+        <div class="floating-actions">
+            <a href="https://linkedin.com/in/lingarajjayli" target="_blank" class="fab-btn linkedin" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/lingarajjayli" target="_blank" class="fab-btn github" aria-label="GitHub Profile">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://wa.me/919482830609" target="_blank" class="fab-btn whatsapp" aria-label="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:lingarajjayli@gmail.com" class="fab-btn email" aria-label="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="resume.pdf" download="Lingaraj-DevOps-Resume.pdf" class="fab-btn resume" aria-label="Download Resume">
+                <i class="fas fa-file-pdf"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <footer style="border-top: 1px solid var(--border-subtle); padding: 60px 0 30px; margin-top: 50px; background: rgba(19, 27, 44, 0.3);">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+                <div>
+                    <div class="brand" style="font-size: 1.5rem; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; color: #F8FAFC; font-weight: 700;">
+                        <span class="icon" style="background: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"><i class="fas fa-terminal"></i></span> Lingaraj
+                    </div>
+                    <p style="font-size: 0.95rem; color: #94A3B8;">Senior DevOps Engineer specializing in AWS, Azure, Terraform, and multi-cloud architecture. Driving automation, security, and scalability.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 16px; color: #F8FAFC; font-size: 1.1rem;">Quick Links</h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="index.html" style="color: #94A3B8; text-decoration: none; transition: color 0.2s;">Intro</a>
+                        <a href="projects.html" style="color: #94A3B8; text-decoration: none; transition: color 0.2s;">Projects Showcase</a>
+                        <a href="about.html" style="color: #94A3B8; text-decoration: none; transition: color 0.2s;">Experience & Skills</a>
+                        <a href="resume.pdf" download="Lingaraj-DevOps-Resume.pdf" style="color: #06B6D4; text-decoration: none; font-weight: 500;">Download Resume <i class="fas fa-download" style="margin-left: 5px; font-size: 0.8rem;"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 16px; color: #F8FAFC; font-size: 1.1rem;">Connect</h4>
+                    <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+                        <a href="https://linkedin.com/in/lingarajjayli" target="_blank" aria-label="LinkedIn" style="color: #94A3B8; font-size: 1.5rem; transition: color 0.2s;"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/lingarajjayli" target="_blank" aria-label="GitHub" style="color: #94A3B8; font-size: 1.5rem; transition: color 0.2s;"><i class="fab fa-github"></i></a>
+                        <a href="mailto:lingarajjayli@gmail.com" aria-label="Email" style="color: #94A3B8; font-size: 1.5rem; transition: color 0.2s;"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #94A3B8;"><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Bengaluru, India</p>
+                </div>
+            </div>
+            <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px;">
+                <p style="font-size: 0.9rem; margin: 0; color: #94A3B8;">&copy; 2026 Lingaraj. Designed for Impact & Scale.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
