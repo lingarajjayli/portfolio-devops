@@ -4,7 +4,8 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"feat: complete devops portfolio with terraform, k8s, docker, and CI/CD:*)",
       "Bash(gh repo:*)",
-      "Bash(git commit -m \"fix: simplify CI workflow to always pass:*)"
+      "Bash(git commit -m \"fix: simplify CI workflow to always pass:*)",
+      "Bash(git commit -m \"fix: correct secrets syntax in workflow:*)"
     ]
   }
 }
